@@ -20,7 +20,6 @@ export default function Header () {
   return (
     <Fragment>
       <header className={classes.header}>
-        <div className='Level'>Level 1</div>
         <h1>Word Game</h1>
         <Button variant="link" onClick={handleLogout}>
           Log Out
