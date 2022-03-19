@@ -117,21 +117,23 @@ export default function Dashboard () {
   return (
     <>
       <Header />
+      <hr className={styles.hrStyle} />
       <div className={styles.game}>
-        <Row>
-          <Col className='score-board'>
+        <Row className={styles.gameStats}>
+          <Col >
             User Score: {score}
           </Col>
-          <Col className='score-board'>
+          <Col >
             Level: {level}
           </Col>
-          <Col className='score-board'>
+          <Col >
             Trial Left: {trialLeft}
           </Col>
         </Row>
         {currentUserAnswer.length > 0 && <>
+          <hr className={styles.hrStyle} />
           <div className={styles.title}>
-            User Answer
+            Your Answer
           </div>
           <div className={styles.userAnswer}>
             {currentUserAnswerComponentList}
@@ -141,6 +143,7 @@ export default function Dashboard () {
           </Button>
         </>}
         {currentWordJumbled.length > 0 && <>
+          <hr className={styles.hrStyle} />
           <div className={styles.title}>
             Remaining Letters
           </div>
@@ -149,6 +152,7 @@ export default function Dashboard () {
           </div>
         </>}
       </div>
+      <hr className={styles.hrStyle}/>
       <div className="w-100" style={{ maxWidth: "400px" }}>
         <Card>
           <Card.Body>
