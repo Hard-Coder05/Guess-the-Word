@@ -197,6 +197,12 @@ export default function Dashboard () {
     <>
       <Header />
       <hr className={styles.hrStyle} />
+      <Button onClick={() => {
+        toast("Tap on the letters to form your answer. You can edit your answer by again tapping back. Fight with computer to reach next level.");
+      }}>
+        How to Play?
+      </Button>
+      <hr className={styles.hrStyle} />
       <Row className={styles.gameStats}>
         <Col >
           Hi {currentUser.email} !!!
