@@ -5,6 +5,7 @@ import { Link } from "react-router-dom"
 import Header from "./UI/Header"
 import styles from './Dashboard.module.css';
 export default function Dashboard () {
+  const [level, setLevel] = useState(1);
   const [currentWord, setCurrentWord] = useState("");
   const [currentWordJumbled, setCurrentWordJumbled] = useState([]);
   const [jumbledLetterComponentsList, setjumbledLetterComponentsList] = useState([]);
@@ -55,9 +56,9 @@ export default function Dashboard () {
         function (letter, index) {
           return <Button style={letterStyle} onClick={
             () => {
-              var dummyArray=currentUserAnswer.join('').concat(letter); 
+              var dummyArray = currentUserAnswer.join('').concat(letter);
               console.log(dummyArray);
-              setCurrentUserAnswer(dummyArray.split('')); 
+              setCurrentUserAnswer(dummyArray.split(''));
               currentWordJumbled.splice(index, 1);
               setCurrentWordJumbled([...currentWordJumbled]);
             }
@@ -67,7 +68,7 @@ export default function Dashboard () {
         })
       setjumbledLetterComponentsList(letterList);
     }
-    else{
+    else {
       setjumbledLetterComponentsList([]);
     }
   }, [currentWordJumbled]);
@@ -90,27 +91,32 @@ export default function Dashboard () {
         })
       setCurrentUserAnswerComponentList(letterList);
     }
-    else{
+    else {
       setCurrentUserAnswerComponentList([]);
     }
   }, [currentUserAnswer]);
-  const { currentUser } = useAuth()
+  const { currentUser } = useAuth();
+
   return (
     <>
       <Header />
       <div className={styles.game}>
-        <div className={styles.title}>
-          User Answer
-        </div>
-        <div className={styles.userAnswer}>
-          {currentUserAnswerComponentList}
-        </div>
-        <div className={styles.title}>
-          Remaining Letters
-        </div>
-        <div className={styles.jumbledLetters}>
-          {jumbledLetterComponentsList}
-        </div>
+        {currentUserAnswer.length > 0 && <>
+          <div className={styles.title}>
+            User Answer
+          </div>
+          <div className={styles.userAnswer}>
+            {currentUserAnswerComponentList}
+          </div>
+        </>}
+        {currentWordJumbled.length > 0 && <>
+          <div className={styles.title}>
+            Remaining Letters
+          </div>
+          <div className={styles.jumbledLetters}>
+            {jumbledLetterComponentsList}
+          </div>
+        </>}
       </div>
       <div className="w-100" style={{ maxWidth: "400px" }}>
         <Card>
