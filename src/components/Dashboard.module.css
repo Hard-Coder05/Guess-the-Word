@@ -4,10 +4,7 @@
 .game{
 	width: 100%;
 	text-align: center;
-}
-.jumbledLetters{
-	width: 100%;
-}
+} 
 .gameStats{
   text-align: center; 
   color: white;

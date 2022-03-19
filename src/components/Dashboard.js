@@ -10,6 +10,7 @@ export default function Dashboard () {
   const [score, setScore] = useState(600);
   const [level, setLevel] = useState("");
   const [win, setWin] = useState(0);
+  const [round, setRound] = useState(3);
   const [computerPoints, setComputerPoints] = useState(600);
   const [currentWord, setCurrentWord] = useState("");
   const [currentWordJumbled, setCurrentWordJumbled] = useState([]);
@@ -20,6 +21,18 @@ export default function Dashboard () {
 
   // styling for letters
   var letterStyle = {
+    padding: 10,
+    margin: 10,
+    width: "20%",
+    backgroundColor: "#ffde00",
+    color: "#ffffff",
+    display: "inline-block",
+    fontFamily: "monospace",
+    fontSize: 32,
+    textAlign: "center",
+    cursor: "pointer",
+  };
+  var letterStyle2 = {
     padding: 10,
     margin: 10,
     backgroundColor: "#ffde00",
@@ -35,10 +48,8 @@ export default function Dashboard () {
     var result = '';
     var characters = 'abcdefghijklmnopqrstuvwxyz';
     var charactersLength = characters.length;
-    for (var i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() *
-        charactersLength));
-    }
+    for (var i = 0; i < length; i++)
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
     return result;
   }
 
@@ -72,7 +83,14 @@ export default function Dashboard () {
         setCurrentUserAnswer([]);
       });
     // empty dependency array means this effect will only run once (like componentDidMount in classes)
-  }, [score, win]);
+    if (round === 0) {
+      setRound(3);
+      if (computerPoints <= score)
+        setWin(win + 1);
+      setComputerPoints(600);
+      setScore(600);
+    }
+  }, [round]);
 
   // jumble the word received
   useEffect(() => {
@@ -122,7 +140,7 @@ export default function Dashboard () {
     if (currentUserAnswer.length > 0) {
       var letterList = currentUserAnswer.map(
         function (letter, index) {
-          return <Button style={letterStyle} onClick={
+          return <Button style={letterStyle2} onClick={
             () => {
               var dummyArray = currentWordJumbled.join('').concat(letter);
               setCurrentWordJumbled(dummyArray.split(''));
@@ -151,22 +169,28 @@ export default function Dashboard () {
     if (userFinalAnswer.toString() === currentWord.toString()) {
       setScore(score + 20 * (userFinalAnswer.length));
       setComputerPoints(computerPoints - 20 * (userFinalAnswer.length));
-      setWin(win + 1);
-      toast("Congratulations!! You entered a new round");
+      setRound(round - 1);
+      toast("Congratulations!! You entered the next round");
     }
     else if (Array.isArray(data) && data[0].word === userFinalAnswer.toString()) {
       if (userFinalAnswer.length > currentWord.toString().length) {
         setScore(score + 20 * (userFinalAnswer.length));
         setComputerPoints(computerPoints - 20 * (userFinalAnswer.length));
-        setWin(win + 1);
-        toast("Congratulations!! You entered a new round");
+        setRound(round - 1);
+        toast("Congratulations!! You entered the next round");
       }
       else {
-        toast("Sorry!! Computer has a longer word in head");
+        setScore(score - 20 * (currentWord.length));
+        setComputerPoints(computerPoints + 20 * (currentWord.length));
+        setRound(round - 1);
+        toast("Sorry!! Computer had a longer word in head which is " + currentWord.toString().toUpperCase());
       }
     }
     else {
-      toast("Heyy! Type in a meaningfull word");
+      setScore(score - 20 * (currentWord.length));
+      setComputerPoints(computerPoints + 20 * (currentWord.length));
+      setRound(round - 1);
+      toast("Heyy! Type in a meaningfull word next time. The answer was: " + currentWord.toString().toUpperCase());
     }
   }
   return (
