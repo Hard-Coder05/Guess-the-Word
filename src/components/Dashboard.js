@@ -6,8 +6,8 @@ import Header from "./UI/Header"
 import styles from './Dashboard.module.css';
 export default function Dashboard () {
   const [score, setScore] = useState(400);
-  const [level, setLevel] = useState(1);
-  const [trialLeft, setTrialLeft] = useState(3);
+  const [level, setLevel] = useState("");
+  const [win, setWin] = useState(0);
   const [currentWord, setCurrentWord] = useState("");
   const [currentWordJumbled, setCurrentWordJumbled] = useState([]);
   const [jumbledLetterComponentsList, setjumbledLetterComponentsList] = useState([]);
@@ -27,6 +27,37 @@ export default function Dashboard () {
     cursor: "pointer",
   };
 
+  function makeid (length) {
+    var result = '';
+    var characters = 'abcdefghijklmnopqrstuvwxyz';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() *
+        charactersLength));
+    }
+    return result;
+  }
+
+  useEffect(() => {
+    setLevel("Beginner")
+    if (win > 10)
+      setLevel("Novice");
+    if (win > 15)
+      setLevel("Competence");
+    if (win > 25)
+      setLevel("Intermediate");
+    if (win > 50)
+      setLevel("Proficient");
+    if (win > 100)
+      setLevel("Expert");
+    if (win > 200)
+      setLevel("Wordly Godly");
+    if (win > 300)
+      setLevel("Champion");
+    if (win > 500)
+      setLevel("SLayer");
+  }, [win]);
+
   // request to server to recieve the word
   useEffect(() => {
     // GET request using fetch inside useEffect React hook
@@ -37,14 +68,17 @@ export default function Dashboard () {
         setCurrentUserAnswer([]);
       });
     // empty dependency array means this effect will only run once (like componentDidMount in classes)
-  }, [level]);
+  }, [win]);
 
   // jumble the word received
   useEffect(() => {
     if (currentWord.length > 0) {
       console.log(currentWord);
-      var a = currentWord.toString().split(""),
-        n = a.length;
+      var a = currentWord.toString();
+      var b = makeid(16 - a.toString().length).toString();
+      a = a.concat(b);
+      a = a.split('');
+      var n = a.length;
       for (var i = n - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
         var tmp = a[i];
@@ -101,17 +135,18 @@ export default function Dashboard () {
       setCurrentUserAnswerComponentList([]);
     }
   }, [currentUserAnswer]);
+
   const { currentUser } = useAuth();
 
   const buttonClickHandler = () => {
     var userFinalAnswer = currentUserAnswer.join('');
     if (userFinalAnswer === currentWord.toString()) {
       setScore(score + 50);
-      setLevel(level + 1);
+      setWin(win + 1);
     }
     else {
+      setWin(win - 1);
       setScore(score - 30);
-      setTrialLeft(trialLeft - 1);
     }
   }
   return (
@@ -127,7 +162,7 @@ export default function Dashboard () {
             Level: {level}
           </Col>
           <Col >
-            Trial Left: {trialLeft}
+            Wins till now: {win}
           </Col>
         </Row>
         {currentUserAnswer.length > 0 && <>
