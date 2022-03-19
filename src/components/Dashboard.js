@@ -152,7 +152,7 @@ export default function Dashboard () {
           </div>
         </>}
       </div>
-      <hr className={styles.hrStyle}/>
+      {/* <hr className={styles.hrStyle} />
       <div className="w-100" style={{ maxWidth: "400px" }}>
         <Card>
           <Card.Body>
@@ -162,7 +162,8 @@ export default function Dashboard () {
               Update Profile
             </Link>
           </Card.Body>
-        </Card></div>
+        </Card>
+      </div> */}
     </>
   )
 }
