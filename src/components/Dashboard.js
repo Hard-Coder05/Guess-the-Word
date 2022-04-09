@@ -17,7 +17,6 @@ export default function Dashboard () {
   const [jumbledLetterComponentsList, setjumbledLetterComponentsList] = useState([]);
   const [currentUserAnswer, setCurrentUserAnswer] = useState([]);
   const [currentUserAnswerComponentList, setCurrentUserAnswerComponentList] = useState([]);
-  const [isUserAnswerValid, setUserAnswerValid] = useState(false);
 
   // styling for letters
   var letterStyle = {
@@ -95,7 +94,6 @@ export default function Dashboard () {
   // jumble the word received
   useEffect(() => {
     if (currentWord.length > 0) {
-      console.log(currentWord);
       var a = currentWord.toString();
       var b = makeid(16 - a.toString().length).toString();
       a = a.concat(b);
@@ -119,7 +117,6 @@ export default function Dashboard () {
           return <Button style={letterStyle} onClick={
             () => {
               var dummyArray = currentUserAnswer.join('').concat(letter);
-              console.log(dummyArray);
               setCurrentUserAnswer(dummyArray.split(''));
               currentWordJumbled.splice(index, 1);
               setCurrentWordJumbled([...currentWordJumbled]);
@@ -167,28 +164,24 @@ export default function Dashboard () {
     const response = await fetch(url);
     const data = await response.json();
     if (userFinalAnswer.toString() === currentWord.toString()) {
-      setScore(score + 20 * (userFinalAnswer.length));
       setComputerPoints(computerPoints - 20 * (userFinalAnswer.length));
       setRound(round - 1);
       toast("Congratulations!! You entered the next round");
     }
     else if (Array.isArray(data) && data[0].word === userFinalAnswer.toString()) {
       if (userFinalAnswer.length > currentWord.toString().length) {
-        setScore(score + 20 * (userFinalAnswer.length));
         setComputerPoints(computerPoints - 20 * (userFinalAnswer.length));
         setRound(round - 1);
         toast("Congratulations!! You entered the next round");
       }
       else {
         setScore(score - 20 * (currentWord.length));
-        setComputerPoints(computerPoints + 20 * (currentWord.length));
         setRound(round - 1);
         toast("Sorry!! Computer had a longer word in head which is " + currentWord.toString().toUpperCase());
       }
     }
     else {
       setScore(score - 20 * (currentWord.length));
-      setComputerPoints(computerPoints + 20 * (currentWord.length));
       setRound(round - 1);
       toast("Heyy! Type in a meaningfull word next time. The answer was: " + currentWord.toString().toUpperCase());
     }
